@@ -1,0 +1,8 @@
+{
+  "name": "TYPECHAIN",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ghehd231/BlockChain-TypeScript-.git",
+  "author": "백호동 <ghehd2311@gmail.com>",
+  "license": "MIT"
+}

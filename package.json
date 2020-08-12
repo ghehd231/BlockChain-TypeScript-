@@ -6,7 +6,13 @@
   "author": "백호동 <ghehd2311@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "prestart": "tsc"
+    "start": "tsc-watch --onSuccess \" node dist/index.js\" "
+  },
+  "devDependencies": {
+    "tsc": "^1.20150623.0",
+    "tsc-watch": "^4.2.9"
+  },
+  "dependencies": {
+    "typescript": "^3.9.7"
   }
 }

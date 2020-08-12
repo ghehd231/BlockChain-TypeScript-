@@ -103,3 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
+#typescript 컴파일 된것들
+dist

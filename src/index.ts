@@ -1,27 +1,23 @@
-class Human {
-  public name: string;
-  public age: number;
-  public gender: string;
-
-  //constructor : 생성자 => 클래스가 시작할때마다 호출(클래스로 부터 객체를 만들때마다)
-  constructor(name: string, age: number, gender: string) {
-    this.name = name;
-    this.age = age;
-    this.gender = gender;
+class Block {
+  public index: number;
+  public hash: string;
+  public previousHash: string;
+  public data: string;
+  public timestamp: number;
+  constructor(index: number, hash: string, previousHash: string, data: string, timestamp: number) {
+    this.index = index;
+    this.hash = hash;
+    this.previousHash = previousHash;
+    this.data = data;
+    this.timestamp = timestamp;
   }
 }
+const genesisBlock: Block = new Block(0, '23232323', '', 'Hello', 12345);
 
-const lynn = new Human('Lynn', 22, 'female');
+// block-chain : 블록의 연걸
+// let blockChain: [Block] ==> typescript에서 블록만 블록체인에 추가하도록 체크함
+// blockChain.push('block') => x
+let blockChain: [Block] = [genesisBlock];
 
-const person = {
-  name: 'ghehd',
-  age: 22,
-  gender: 'male',
-};
-
-const sayHi = (person: Human): string => {
-  return `hello ${person.name}, ${person.age}, ${person.gender}`;
-};
-
-console.log(sayHi(lynn));
+console.log(blockChain);
 export {};

@@ -60,6 +60,9 @@ const createNewBlock = (data: string): Block => {
 
 // console.log(createNewBlock('hello'), createNewBlock('Bye Bye'));
 
+const getHashforBlock = (aBlock: Block): string =>
+  Block.calculateBlockHash(aBlock.index, aBlock.previousHash, aBlock.timestamp, aBlock.data);
+
 //블록체인의 기반은 블록들이 자신의 전 블록으로의 링크가 있다는 것
 //블록이 유효한지 체크하는 함수 (이전 블록과 비교)
 const isBlockvaild = (candidateBlock: Block, previousBlock: Block): boolean => {
@@ -72,6 +75,17 @@ const isBlockvaild = (candidateBlock: Block, previousBlock: Block): boolean => {
   } else if (previousBlock.hash !== candidateBlock.previousHash) {
     //해쉬값이 다른지 체크
     return false;
+  } else if (getHashforBlock(candidateBlock) !== candidateBlock.hash) {
+    return false;
+  } else {
+    return true;
   }
 };
+
+const addBlock = (candidateBlock: Block): void => {
+  if (!isBlockvaild(candidateBlock, getLatestBlock())) {
+    blockChain.push(candidateBlock);
+  }
+};
+
 export {};

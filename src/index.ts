@@ -1,11 +1,5 @@
 import * as CryptoJs from 'crypto-js';
 class Block {
-  public index: number;
-  public hash: string;
-  public previousHash: string;
-  public data: string;
-  public timestamp: number;
-
   // static method : 클래스가 생성되지 않았어도 호출 할 수 있는 method
   static calculateBlockHash = (
     index: number,
@@ -13,6 +7,19 @@ class Block {
     timestamp: number,
     data: string,
   ): string => CryptoJs.SHA256(index + previousHash + timestamp + data).toString();
+
+  static validateStructure = (aBlock: Block): boolean =>
+    typeof aBlock.index === 'number' &&
+    typeof aBlock.hash === 'string' &&
+    typeof aBlock.previousHash === 'string' &&
+    typeof aBlock.data === 'string' &&
+    typeof aBlock.timestamp === 'number';
+
+  public index: number;
+  public hash: string;
+  public previousHash: string;
+  public data: string;
+  public timestamp: number;
 
   constructor(index: number, hash: string, previousHash: string, data: string, timestamp: number) {
     this.index = index;
@@ -37,16 +44,34 @@ const getLatestBlock = (): Block => blockChain[blockChain.length - 1];
 const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
 
 const createNewBlock = (data: string): Block => {
-  const previosBlock: Block = getLatestBlock();
-  const newIndex: number = previosBlock.index + 1;
+  const previousBlock: Block = getLatestBlock();
+  const newIndex: number = previousBlock.index + 1;
   const newTimestamp: number = getNewTimeStamp();
-  const newHash: string = Block.calculateBlockHash(newIndex, previosBlock.hash, newTimestamp, data);
-  const newBlock = new Block(newIndex, newHash, previosBlock.hash, data, newTimestamp);
+  const newHash: string = Block.calculateBlockHash(
+    newIndex,
+    previousBlock.hash,
+    newTimestamp,
+    data,
+  );
+  const newBlock = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
 
-  // blockChain.push(newBlock); //인덱스가 증가되지 않는 문제가 있어서 추가해본 코드
   return newBlock;
 };
 
-console.log(createNewBlock('hello'), createNewBlock('Bye Bye'));
-// console.log(getBlockchain());
+// console.log(createNewBlock('hello'), createNewBlock('Bye Bye'));
+
+//블록체인의 기반은 블록들이 자신의 전 블록으로의 링크가 있다는 것
+//블록이 유효한지 체크하는 함수 (이전 블록과 비교)
+const isBlockvaild = (candidateBlock: Block, previousBlock: Block): boolean => {
+  if (!Block.validateStructure(candidateBlock)) {
+    //블록의 구조가 유효한지 체크
+    return false;
+  } else if (previousBlock.index + 1 !== candidateBlock.index) {
+    //이전 블록과 현재 블록의 인덱스가 증가 됐는지 체크?
+    return false;
+  } else if (previousBlock.hash !== candidateBlock.previousHash) {
+    //해쉬값이 다른지 체크
+    return false;
+  }
+};
 export {};
